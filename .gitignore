@@ -1,41 +1,99 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
+# Build artifacts
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
+*.lo
 *.la
 *.a
 *.lib
-
-# Executables
+*.so
+*.so.*
+*.dylib
+*.dll
 *.exe
 *.out
 *.app
 
-# debug information files
+# Debug and profile
+*.ilk
+*.pdb
 *.dwo
+*.sbr
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Fortran modules
+*.mod
+*.smod
+
+# Qt build
+*.moc
+*.qrc.depends
+*.qrc.cpp
+*.ui.cpp
+*.rcc
+
+# CMake / Autotools / Build scripts
+/CMakeFiles/
+/CMakeCache.txt
+/config.log
+/config.status
+/configure
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache/
+/build-aux/
+/libtool
+/stamp-h1
+*.m4
+*.in
+
+# Project-specific build folders
+/build/
+/src/qt/.uic/
+/src/qt/.moc/
+/src/qt/.rcc/
+
+# IDE/editor files
+*.swp
+*~
+*.bak
+*.tmp
+*.user
+*.sdf
+*.suo
+*.ncb
+*.vcproj
+*.vcxproj
+*.opensdf
+*.idea/
+*.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Wallet and runtime
+*.pid
+*.log
+*.pid.lock
+*.wallet.*
+hrbjackpotcoin.conf
+peers.dat
+mempool.dat
+banlist.dat
+fee_estimates.dat
+debug.log
+db.log
+blocks/
+chainstate/
+indexes/
+testnet3/
+regtest/
+hrbjackpotcoin.log
+
+# Hidden backup
+*.orig
+*.rej
