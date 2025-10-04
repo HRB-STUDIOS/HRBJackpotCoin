@@ -13,8 +13,14 @@ jobs:
     name: Build (Linux)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (full history, no submodules/LFS)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "false"
+          lfs: "false"
+      - name: Mark repo safe
+        run: git config --global --add safe.directory '*'
 
       - name: Install build deps
         run: |
@@ -23,7 +29,8 @@ jobs:
             build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 \
             libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev \
             libboost-test-dev libboost-thread-dev libminiupnpc-dev \
-            qtbase5-dev qttools5-dev qttools5-dev-tools
+            qtbase5-dev qttools5-dev qttools5-dev-tools \
+            zip
 
       - name: Autotools bootstrap
         run: |
@@ -57,15 +64,21 @@ jobs:
     name: Build (Windows, cross-compile on Ubuntu)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (full history, no submodules/LFS)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "false"
+          lfs: "false"
+      - name: Mark repo safe
+        run: git config --global --add safe.directory '*'
 
       - name: Install cross toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl git \
-            g++-mingw-w64-x86-64 mingw-w64 mingw-w64-tools cmake
+            g++-mingw-w64-x86-64 mingw-w64 mingw-w64-tools cmake zip
 
       - name: Build depends (Windows)
         run: |
