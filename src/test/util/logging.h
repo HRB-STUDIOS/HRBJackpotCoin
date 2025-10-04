@@ -1,0 +1,42 @@
+// Copyright (c) 2025 HRB Studios
+// HRB Jackpot Coin™ is a trademark of HRB Studios. All rights reserved.
+// Distributed under the MIT software license, see the accompanying LICENSE file or visit https://opensource.org/licenses/MIT
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#ifndef HRBJACKPOTCOIN_TEST_UTIL_LOGGING_H
+#define HRBJACKPOTCOIN_TEST_UTIL_LOGGING_H
+
+#include <util/macros.h>
+
+#include <functional>
+#include <list>
+#include <string>
+
+class DebugLogHelper
+{
+    const std::string m_message;
+    bool m_found{false};
+    std::list<std::function<void(const std::string&)>>::iterator m_print_connection;
+
+    //! Custom match checking function.
+    //!
+    //! Invoked with pointers to lines containing matching strings, and with
+    //! null if check_found() is called without any successful match.
+    //!
+    //! Can return true to enable default DebugLogHelper behavior of:
+    //! (1) ending search after first successful match, and
+    //! (2) raising an error in check_found if no match was found
+    //! Can return false to do the opposite in either case.
+    using MatchFn = std::function<bool(const std::string* line)>;
+    MatchFn m_match;
+
+    void check_found();
+
+public:
+    explicit DebugLogHelper(std::string message, MatchFn match = [](const std::string*){ return true; });
+    ~DebugLogHelper() { check_found(); }
+};
+
+#define ASSERT_DEBUG_LOG(message) DebugLogHelper UNIQUE_NAME(debugloghelper)(message)
+
+#endif // HRBJACKPOTCOIN_TEST_UTIL_LOGGING_H

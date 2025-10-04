@@ -1,0 +1,125 @@
+# HRB Jackpot Coin: Full Rebrand Plan
+
+# ✅ Project Folder:
+# D:\HRB_Jackpot\
+
+# ✅ Final Binaries:
+# - hrbd (daemon)
+# - hrb-qt (GUI wallet)
+# - hrb-wallet-cli (optional CLI wallet)
+
+# ✅ Build Dependencies (Ubuntu):
+
+sudo apt update
+sudo apt install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git
+sudo apt install -y libssl-dev libevent-dev libboost-all-dev
+sudo apt install -y libprotobuf-dev protobuf-compiler
+sudo apt install -y qttools5-dev-tools qttools5-dev libqt5svg5-dev qtbase5-dev
+
+# ✅ Source Code:
+1. Download HRB Jackpot Coin Core v26.0 → https://www.hrbstudios.combin/hrbjackpotcoin-core-26.0/
+2. Extract to: D:\HRB_Jackpot\hrbjackpotcoin-26.0
+
+# ✅ Phase 1: Initial Rename
+
+- Rename folder: D:\HRB_Jackpot\hrbjackpotcoin-26.0 → D:\HRB_Jackpot\HRBJackpotCoin
+
+# ✅ Phase 2: Rebranding (Global Search & Replace)
+
+- "HRB Jackpot Coin" → "HRB Jackpot Coin"
+- "hrbjackpotcoin" → "hrbjackpotcoin"
+- "HRB" → "HRB"
+- "hrbjackpotcoin" → "HRB_JACKPOT_COIN"
+
+Tools: Visual Studio Code global replace, or Linux command line:
+
+find ./ -type f -exec sed -i 's/HRB Jackpot Coin/HRB Jackpot Coin/g' {} +
+find ./ -type f -exec sed -i 's/hrbjackpotcoin/hrbjackpotcoin/g' {} +
+find ./ -type f -exec sed -i 's/HRB/HRB/g' {} +
+
+# ✅ Phase 3: Binary Renames
+
+- src/hrbjackpotcoind → hrbd
+- src/qt/hrbjackpotcoin-qt → hrb-qt
+- src/hrbjackpotcoin-cli → hrb-wallet-cli (optional)
+- src/hrbjackpotcoin-tx → hrb-tx (optional)
+
+# ✅ Phase 4: Network & Chainparams
+
+- src/chainparams.cpp:
+  - Update message start strings
+  - Change default ports (P2P, RPC)
+  - Define your new genesis block (later step)
+
+- src/chainparamsseeds.h:
+  - Update with new DNS seeds or IPs
+
+# ✅ Phase 5: Currency Details
+
+- src/amount.h / src/amount.cpp:
+  - Adjust COIN value if needed
+  - Modify default fees, min relay fee in src/policy/fees.cpp
+
+# ✅ Phase 6: GUI Wallet Branding
+
+- src/qt:
+  - Update splash screens (res/images)
+  - Replace icons (res/icons)
+  - Rename window titles and About dialogs
+
+# ✅ Phase 7: Build System Update
+
+- configure.ac → change project name, version
+- Makefile.am → update names
+- doc/* → rewrite README.md, manpages
+
+# ✅ Phase 8: Genesis Block Generation
+
+- Use contrib/devtools/generate-genesis-block.py (or custom) to create new genesis
+- Set timestamp, nonce, merkle root in chainparams.cpp
+
+# ✅ Phase 9: Compilation
+
+cd /mnt/d/HRBJackpotCoin
+./autogen.sh
+./configure --with-gui=qt5
+make -j$(nproc)
+
+# ✅ Expected Output Binaries:
+
+- src/hrbd
+- src/qt/hrb-qt
+- src/hrb-wallet-cli (optional)
+
+# ✅ Phase 10: Future Enhancements
+
+- Jackpot logic in src/consensus/validation.cpp
+- Additional RPCs for jackpot status in src/rpc/
+- Optional: Web dashboard, mobile wallet
+
+---
+
+👉 Action Required:
+1. Confirm:
+- Block time
+- Supply cap
+- Block reward
+- Ports (P2P/RPC)
+- Genesis timestamp
+
+2. Provide logo/icon assets
+
+Once confirmed, I’ll generate exact code patches for every step.
+
+# Let's build HRB Jackpot Coin 💰🚀
+
+grep -rInE "class HRB|HRB Jackpot Coin" ./src
+grep -rl "HRB Jackpot Coin" ./src
+
+
+make clean
+make -j$(nproc)
+
+
+
+

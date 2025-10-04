@@ -1,0 +1,2 @@
+ac_cv_search_qt_plugin_instance_QMinimalIntegrationPlugin='-lqminimal'
+ac_cv_search_qt_plugin_instance_QWindowsIntegrationPlugin='-lqwindows'

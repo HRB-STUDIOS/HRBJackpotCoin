@@ -1,0 +1,7 @@
+[main]
+host = https://www.transifex.com
+
+[o:hrbjackpotcoin:p:hrbjackpotcoin:r:qt-translation-026x]
+file_filter = src/qt/locale/hrbjackpotcoin_<lang>.xlf
+source_file = src/qt/locale/hrbjackpotcoin_en.xlf
+source_lang = en

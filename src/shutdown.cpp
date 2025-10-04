@@ -1,0 +1,44 @@
+// Copyright (c) 2025 HRB Studios
+// HRB Jackpot Coin™ is a trademark of HRB Studios. All rights reserved.
+// Distributed under the MIT software license, see the accompanying LICENSE file or visit https://opensource.org/licenses/MIT
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include <shutdown.h>
+
+#include <kernel/context.h>
+#include <logging.h>
+#include <util/check.h>
+#include <util/signalinterrupt.h>
+
+#include <assert.h>
+#include <system_error>
+
+void StartShutdown()
+{
+    try {
+        Assert(kernel::g_context)->interrupt();
+    } catch (const std::system_error&) {
+        LogPrintf("Sending shutdown token failed\n");
+        assert(0);
+    }
+}
+
+void AbortShutdown()
+{
+    Assert(kernel::g_context)->interrupt.reset();
+}
+
+bool ShutdownRequested()
+{
+    return bool{Assert(kernel::g_context)->interrupt};
+}
+
+void WaitForShutdown()
+{
+    try {
+        Assert(kernel::g_context)->interrupt.wait();
+    } catch (const std::system_error&) {
+        LogPrintf("Reading shutdown token failed\n");
+        assert(0);
+    }
+}

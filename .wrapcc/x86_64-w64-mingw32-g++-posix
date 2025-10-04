@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+ARGS=()
+for a in "$@"; do
+  [[ "$a" == "-I/usr/include" ]] && continue
+  [[ "$a" =~ ^-I/usr/include($|/) ]] && continue
+  ARGS+=("$a")
+done
+exec /usr/bin/x86_64-w64-mingw32-g++-posix \
+  -idirafter /usr/x86_64-w64-mingw32/include \
+  -idirafter /usr/share/mingw-w64/include \
+  "${ARGS[@]}"

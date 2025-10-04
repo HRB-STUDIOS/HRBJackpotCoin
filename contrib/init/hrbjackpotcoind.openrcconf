@@ -1,0 +1,33 @@
+# /etc/conf.d/hrbjackpotcoind: config file for /etc/init.d/hrbjackpotcoind
+
+# Config file location
+#hrbjackpotcoinD_CONFIGFILE="/etc/hrbjackpotcoin/hrbjackpotcoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $hrbjackpotcoinD_USER)
+#hrbjackpotcoinD_PIDDIR="/var/run/hrbjackpotcoind"
+
+# What filename to give the pidfile
+#hrbjackpotcoinD_PIDFILE="${hrbjackpotcoinD_PIDDIR}/hrbjackpotcoind.pid"
+
+# Where to write hrbjackpotcoind data (be mindful that the blockchain is large)
+#hrbjackpotcoinD_DATADIR="/var/lib/hrbjackpotcoind"
+
+# User and group to own hrbjackpotcoind process
+#hrbjackpotcoinD_USER="hrbjackpotcoin"
+#hrbjackpotcoinD_GROUP="hrbjackpotcoin"
+
+# Path to hrbjackpotcoind executable
+#hrbjackpotcoinD_BIN="/usr/bin/hrbjackpotcoind"
+
+# Nice value to run hrbjackpotcoind under
+#hrbjackpotcoinD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#hrbjackpotcoinD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for hrbjackpotcoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+hrbjackpotcoinD_SIGTERM_TIMEOUT=600

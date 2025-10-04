@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# drop accidental host includes if they sneak in
+ARGS=()
+for a in "$@"; do
+  [[ "$a" == "-I/usr/include" ]] && continue
+  [[ "$a" =~ ^-I/usr/include($|/) ]] && continue
+  ARGS+=("$a")
+done
+exec /usr/bin/x86_64-w64-mingw32-gcc \
+  -idirafter /usr/x86_64-w64-mingw32/include \
+  -idirafter /usr/share/mingw-w64/include \
+  "${ARGS[@]}"

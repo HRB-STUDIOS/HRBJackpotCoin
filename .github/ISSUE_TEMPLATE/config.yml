@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: HRBJackpotCoin Core Security Policy
+    url: https://github.com/hrbjackpotcoin/hrbjackpotcoin/blob/master/SECURITY.md
+    about: View security policy
+  - name: HRBJackpotCoin Core Developers
+    url: https://hrbjackpotcoincore.org
+    about: HRBJackpotCoin Core homepage

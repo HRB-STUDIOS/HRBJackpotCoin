@@ -1,0 +1,24 @@
+Making all in src
+make[1]: Entering directory '/mnt/d/HRBJackpotCoin/src'
+cd .. && make  am--refresh
+cd .. && make  am--refresh
+make[2]: Entering directory '/mnt/d/HRBJackpotCoin/src'
+cd .. && make  am--refresh
+cd .. && make  am--refresh
+make -C .. src/config/hrbjackpotcoin-config.h.in
+make[3]: Entering directory '/mnt/d/HRBJackpotCoin'
+make[3]: 'src/config/hrbjackpotcoin-config.h.in' is up to date.
+make[3]: Leaving directory '/mnt/d/HRBJackpotCoin'
+../share/genbuild.sh "/mnt/d/HRBJackpotCoin/src/obj/build.h" \
+  "/mnt/d/HRBJackpotCoin"
+make[3]: Entering directory '/mnt/d/HRBJackpotCoin'
+make[3]: Leaving directory '/mnt/d/HRBJackpotCoin'
+make[2]: Leaving directory '/mnt/d/HRBJackpotCoin/src'
+make[1]: Leaving directory '/mnt/d/HRBJackpotCoin/src'
+Making all in doc/man
+make[1]: Entering directory '/mnt/d/HRBJackpotCoin/doc/man'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/mnt/d/HRBJackpotCoin/doc/man'
+make[1]: Entering directory '/mnt/d/HRBJackpotCoin'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/mnt/d/HRBJackpotCoin'

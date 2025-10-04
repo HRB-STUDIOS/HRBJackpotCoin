@@ -1,0 +1,51 @@
+// HRB Jackpot Coin: Block Time Halving Milestones
+// This is a standalone module for managing dynamic block times
+
+#include <cstdint>
+
+// Block height milestones for each phase
+constexpr int HALVING_INTERVAL = 210000;
+constexpr int HALVING_PHASE_1 = HALVING_INTERVAL * 1;  // Block 210,000
+constexpr int HALVING_PHASE_2 = HALVING_INTERVAL * 2;  // Block 420,000
+constexpr int HALVING_PHASE_3 = HALVING_INTERVAL * 3;  // Block 630,000
+constexpr int HALVING_PHASE_4 = HALVING_INTERVAL * 4;  // Block 840,000
+
+// Block times in seconds for each phase
+constexpr int BLOCK_TIME_PHASE_0 = 60;      // 1 min
+constexpr int BLOCK_TIME_PHASE_1 = 120;     // 2 min
+constexpr int BLOCK_TIME_PHASE_2 = 240;     // 4 min
+constexpr int BLOCK_TIME_PHASE_3 = 480;     // 8 min
+
+// Rewards per block (pre-reduction)
+constexpr double BASE_BLOCK_REWARD = 2.5;  // 2.5 HRB
+constexpr double REDUCED_BLOCK_REWARD = 1.25; // After reward halving
+
+// Function to get the current target block time based on height
+int GetTargetBlockTime(int nHeight)
+{
+    if (nHeight >= HALVING_PHASE_3) {
+        return BLOCK_TIME_PHASE_3;
+    } else if (nHeight >= HALVING_PHASE_2) {
+        return BLOCK_TIME_PHASE_2;
+    } else if (nHeight >= HALVING_PHASE_1) {
+        return BLOCK_TIME_PHASE_1;
+    } else {
+        return BLOCK_TIME_PHASE_0;
+    }
+}
+
+// Function to get the current block reward based on height
+double GetBlockReward(int nHeight)
+{
+    if (nHeight >= HALVING_PHASE_4) {
+        // Halvings start after reaching max block time phase
+        int halvings = (nHeight - HALVING_PHASE_4) / HALVING_INTERVAL;
+        double reward = REDUCED_BLOCK_REWARD / (1 << halvings);
+        return reward < 0.00000001 ? 0.00000001 : reward; // Minimum reward cap
+    }
+    return BASE_BLOCK_REWARD;
+}
+
+// Example usage (to be called from block subsidy and difficulty code)
+// int targetBlockTime = GetTargetBlockTime(nHeight);
+// double blockReward = GetBlockReward(nHeight);

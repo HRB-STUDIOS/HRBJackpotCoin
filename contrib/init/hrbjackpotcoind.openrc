@@ -1,0 +1,93 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/hrbjackpotcoin/.hrbjackpotcoin" ]; then
+	hrbjackpotcoinD_DEFAULT_DATADIR="/var/lib/hrbjackpotcoin/.hrbjackpotcoin"
+else
+	hrbjackpotcoinD_DEFAULT_DATADIR="/var/lib/hrbjackpotcoind"
+fi
+
+hrbjackpotcoinD_CONFIGFILE=${hrbjackpotcoinD_CONFIGFILE:-/etc/hrbjackpotcoin/hrbjackpotcoin.conf}
+hrbjackpotcoinD_PIDDIR=${hrbjackpotcoinD_PIDDIR:-/var/run/hrbjackpotcoind}
+hrbjackpotcoinD_PIDFILE=${hrbjackpotcoinD_PIDFILE:-${hrbjackpotcoinD_PIDDIR}/hrbjackpotcoind.pid}
+hrbjackpotcoinD_DATADIR=${hrbjackpotcoinD_DATADIR:-${hrbjackpotcoinD_DEFAULT_DATADIR}}
+hrbjackpotcoinD_USER=${hrbjackpotcoinD_USER:-${hrbjackpotcoin_USER:-hrbjackpotcoin}}
+hrbjackpotcoinD_GROUP=${hrbjackpotcoinD_GROUP:-hrbjackpotcoin}
+hrbjackpotcoinD_BIN=${hrbjackpotcoinD_BIN:-/usr/bin/hrbjackpotcoind}
+hrbjackpotcoinD_NICE=${hrbjackpotcoinD_NICE:-${NICELEVEL:-0}}
+hrbjackpotcoinD_OPTS="${hrbjackpotcoinD_OPTS:-${hrbjackpotcoin_OPTS}}"
+
+name="HRB Jackpot Coin Core Daemon"
+description="HRB Jackpot Coin cryptocurrency P2P network daemon"
+
+command="/usr/bin/hrbjackpotcoind"
+command_args="-pid=\"${hrbjackpotcoinD_PIDFILE}\" \
+		-conf=\"${hrbjackpotcoinD_CONFIGFILE}\" \
+		-datadir=\"${hrbjackpotcoinD_DATADIR}\" \
+		-daemon \
+		${hrbjackpotcoinD_OPTS}"
+
+required_files="${hrbjackpotcoinD_CONFIGFILE}"
+start_stop_daemon_args="-u ${hrbjackpotcoinD_USER} \
+			-N ${hrbjackpotcoinD_NICE} -w 2000"
+pidfile="${hrbjackpotcoinD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${hrbjackpotcoinD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${hrbjackpotcoinD_USER}:${hrbjackpotcoinD_GROUP}" \
+	"${hrbjackpotcoinD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${hrbjackpotcoinD_USER}:${hrbjackpotcoinD_GROUP}" \
+	"${hrbjackpotcoinD_PIDDIR}"
+
+	checkpath -f \
+	-o "${hrbjackpotcoinD_USER}:${hrbjackpotcoinD_GROUP}" \
+	-m 0660 \
+	"${hrbjackpotcoinD_CONFIGFILE}"
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if grep -qs '^rpcuser=' "${hrbjackpotcoinD_CONFIGFILE}" && \
+		! grep -qs '^rpcpassword=' "${hrbjackpotcoinD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run hrbjackpotcoind."
+		eerror "The setting must appear in ${hrbjackpotcoinD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"HRB Jackpot Coin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

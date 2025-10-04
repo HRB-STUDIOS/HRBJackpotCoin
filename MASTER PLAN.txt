@@ -1,0 +1,576 @@
+🧠 HRB Jackpot Coin: Master Plan (vFinal)
+🎯 Vision:
+The first viral crypto designed for the masses — with provable fairness, jackpot excitement, and a wallet your grandma can use.
+
+🔐 1. Ownership & Governance
+Parent Brand: HRB Studios
+
+Coin Name: HRB Jackpot Coin
+
+Ticker: HRB
+
+Rights: Open-source, community-governed with admin wallet protections
+
+Official Website: hrbstudios.com (to host wallet downloads, updates, terms, etc.)
+
+🪙 2. Tokenomics
+Fixed Supply Cap: 25,000,000 HRB
+
+Genesis Supply: 0 (no premine)
+
+Initial Reward: 50 HRB/block
+
+Reward Halving Interval: Every 210,000 blocks
+
+Block Time Doubling Schedule: Every 210,000 blocks (i.e. every ~2 years)
+
+📉 Halving & Timing Schedule
+Phase	Years	Block Time	Block Reward	Golden Block	Diamond Block	Notes
+Y0–2	0–2	1 min	50 HRB	100 HRB	250 HRB	Hypergrowth
+Y2–4	2–4	2 min	25 HRB	50 HRB	125 HRB	Early community
+Y4–6	4–6	4 min	12.5 HRB	25 HRB	62.5 HRB	Slowing emission
+Y6–8	6–8	8 min	6.25 HRB	12.5 HRB	31.25 HRB	Final spacing
+Y8+	8+	8 min	3.125 → ...	6.25 → ...	15.625 → ...	Halves every 210k blocks
+
+✅ Golden = 2× base reward
+
+✅ Diamond = 5× base reward
+
+✅ Total estimated mining time: ~29.13 years
+
+💰 3. Special Block Rewards
+Golden Block: 2× current base reward
+
+Diamond Block: 5× current base reward
+
+Guaranteed fairness:
+
+50/50 split between ASIC and CPU/GPU miners
+
+If 3 jackpot wins go to one type, the next is forced to the other
+
+🎰 4. Jackpot System
+Jackpot Types:
+
+Mini Jackpot: 50 HRB
+
+Minor Jackpot: 100 HRB
+
+Major Jackpot: 500 HRB
+
+Grand Jackpot: 1000 HRB
+
+Seeded by Owner:
+
+Initial manual funding
+
+Must repay owner +10% before triggering new win
+
+Growth Logic:
+
+Every transaction contributes to jackpot pools
+
+Hardcoded fairness rules prevent gaming the system
+
+Win triggers animated GUI popup and mobile alert
+
+🖥️ 5. Wallet & Mining Design
+🖥️ GUI Desktop Wallet:
+1-click "Create Wallet"
+
+1-click "Create Mining Wallet"
+
+Device-type auto-detection (ASIC vs CPU) via hash rate
+
+Mining panel: block height, status, progress bar
+
+Jackpot popup animations
+
+Auto desktop icon for easy access
+
+📱 Mobile Companion App (Phase 2):
+Real-time miner stats & alerts
+
+Jackpot win notifications
+
+Monthly subscription model
+
+Only official app can link to mining wallet
+
+🚫 6. Anti-Cheat Enforcement
+✅ Phase 1: Soft Flag
+Flags if device changes (e.g. CPU → ASIC)
+
+Mining allowed, but disables special blocks
+
+Cold wallet blocked
+
+Logs flag for admin review
+
+🚫 Phase 2: Hard Ban
+If user persists, permanent ban triggers
+
+Disables jackpot eligibility forever
+
+Wallet funds returned to jackpot pool
+
+No appeal process
+
+🧪 Admin Tools
+flagged_wallets.log auto-loads for admin users in GUI
+
+Flagged wallets frozen from sending
+
+GUI notification system for new flags
+
+Admin-only buttons: Ban, Unban, Review logs
+
+🔐 7. Long-Term Scarcity Strategy
+Aggressive early release (~42% in first 2 years)
+
+Slows to sustainable tail (halves every ~3.2 years after Y8)
+
+8-minute blocks reduce chain bloat long-term
+
+Jackpot odds scale down over time
+
+Later rewards too small for ASIC dominance → favors hobbyist CPU mining again
+
+🧠 8. Narrative & Virality Strategy
+🎯 “Hope, Fun, and Instant Dopamine”
+
+🕹️ Gamified mining
+
+🎉 Viral jackpot win moments
+
+👵 Passes “grandma test” (dead simple UX)
+
+🐋 Pulls in whales by exciting the masses
+
+🧵 Meme-worthy moments: “Powerball of Crypto”
+
+🔜 9. Immediate Next Tasks
+✅ Blockchain functional and compiling
+
+✅ Full tokenomics locked in
+
+🔨 Code GetBlockSubsidy(), Golden/Diamond scaling
+
+🔨 Implement jackpot reward triggers in miner
+
+🎨 Add GUI: jackpot popup animations + admin panel
+
+📦 Build OS installers (auto desktop icon)
+
+📱 Begin sketching mobile companion features
+
+✅ Final HRB Secure Recovery: Locked Blueprint Summary
+Core Concept:
+No seed phrases. No ID. No selfies. No Google or Apple.
+Just you — your 2FA, your biometrics, your encrypted vault.
+
+Recovery Model:
+➡️ Any 2 of 3 threshold key reconstruction using:
+
+Share A: Device-Bound Biometric Share
+
+Local only
+
+Biometric-bound via Secure Enclave/TPM
+
+Share B: 2FA TOTP Share
+
+Encrypted by 2FA secret (e.g., Google Authenticator)
+
+Stored on-chain or IPFS, publicly accessible but useless without 2FA
+
+Share C: Optional Vault Backup
+
+Encrypted with strong user passphrase
+
+Exportable as QR code or USB file
+
+🔒 What to Build (Technical To-Do)
+✅ 1. Wallet Initialization Flow
+
+Generate master private key
+
+Derive recovery key
+
+Split recovery key using Shamir (or MPC)
+
+Encrypt:
+
+Share A → Biometric key (TPM/Secure Enclave)
+
+Share B → 2FA-derived key
+
+Share C → passphrase-derived key
+
+Store A on device, B on-chain/IPFS, C optionally exported
+
+✅ 2. Recovery Flow
+
+Prompt user for wallet address
+
+Retrieve Share B
+
+Request TOTP 2FA (to decrypt B)
+
+Request biometric unlock (new device regenerates Share A)
+
+If needed, decrypt Share C via passphrase
+
+Reconstruct recovery key from any 2 shares
+
+Unlock master wallet key
+
+✅ 3. Security Library Integration
+Use a proven crypto library:
+
+slip39 for Shamir/Mnemonic-based sharing
+
+libthresholdcryptography
+
+sss for high-efficiency implementations
+
+✅ 4. Biometrics Integration
+
+Use Secure Enclave (iOS) / Keystore (Android) / TPM (Windows/Linux)
+
+Biometric-bound keys must never leave the chip
+
+On new device: generate fresh Share A via biometric challenge → local secret reconstruction
+
+✅ 5. Blockchain/IPFS Storage
+
+Store Share B on-chain:
+
+Encrypted blob tied to wallet address
+
+Can also use IPFS to decentralize
+
+Never contains raw data — must be TOTP-decryptable
+
+🧠 UX You MUST Nail
+Step	UX Tip
+Create Vault Backup	“Download a safety backup? If you ever lose your phone + 2FA, this can save your coins.”
+Show Backup QR	Let user screenshot or print a recovery card
+Test Recovery Flow	Offer simulated recovery test (bonus: gamify it)
+Biometric Challenge	Keep it quick. “Just use your face/fingerprint to prove it’s really you.”
+2FA Prompt	Let user scan a QR into Google Authenticator, HRB Authenticator, or Authy
+Recovered? 🎉	Flash confetti. Literally. Instant trust-building.
+
+🔁 Optional “Recovery Assistant” App
+Let users check and verify:
+
+Which shares are active
+
+Run simulated recovery test
+
+“Last verified on: [date]” badges
+
+Bonus: Notify if 2FA sync drifts or if vault is untested too long
+
+🛡️ Security Guarantees
+✅ 100% self-custody
+✅ No single point of failure
+✅ Nothing lives in the cloud unprotected
+✅ 2FA and biometrics never used as passwords, only key guards
+✅ No one can steal your recovery unless they physically have your 2FA and match your biometrics
+✅ Even HRB Studios can’t recover for you — and that’s the point.
+
+
+
+Here’s the updated and locked version of your HRB Jackpot Coin: Master Plan (vFinal) with clarified formatting and current implementation details:
+
+---
+
+🧠 **HRB Jackpot Coin: Master Plan (vFinal)**
+
+🎯 **Vision**
+The first viral crypto designed for the masses — with provable fairness, jackpot excitement, and a wallet your grandma can use.
+
+---
+
+🔐 **1. Ownership & Governance**
+
+* **Parent Brand:** HRB Studios
+* **Coin Name:** HRB Jackpot Coin
+* **Ticker:** HRB
+* **Rights:** Open-source, community-governed, admin wallet protected
+* **Website:** `hrbstudios.com`
+
+---
+
+🪙 **2. Tokenomics**
+
+* **Total Supply Cap:** 25,000,000 HRB
+* **Genesis Supply:** 0 HRB (no premine)
+* **Initial Block Reward:** 50 HRB
+* **Halving Interval:** Every 210,000 blocks
+* **Block Time Doubling:** Every 210,000 blocks (approx. every 2 years)
+
+---
+
+📉 **3. Halving & Timing Schedule**
+
+| Phase | Years | Block Time | Block Reward | Golden Block | Diamond Block | Notes            |
+| ----- | ----- | ---------- | ------------ | ------------ | ------------- | ---------------- |
+| Y0–2  | 0–2   | 1 min      | 50 HRB       | 100 HRB      | 250 HRB       | Hypergrowth      |
+| Y2–4  | 2–4   | 2 min      | 25 HRB       | 50 HRB       | 125 HRB       | Early Community  |
+| Y4–6  | 4–6   | 4 min      | 12.5 HRB     | 25 HRB       | 62.5 HRB      | Slowing Emission |
+| Y6–8  | 6–8   | 8 min      | 6.25 HRB     | 12.5 HRB     | 31.25 HRB     | Final Spacing    |
+| Y8+   | 8+    | 8 min      | 3.125 → ...  | 6.25 → ...   | 15.625 → ...  | Tail emission    |
+
+* ✅ **Golden Block** = 2× base reward
+* ✅ **Diamond Block** = 5× base reward
+* ⏳ Estimated mining lifespan: \~29.13 years
+
+---
+
+💰 **4. Special Block Rewards**
+
+* **Golden Block:** 2× reward
+* **Diamond Block:** 5× reward
+* 50/50 ASIC vs CPU-GPU split enforcement
+* Anti-monopoly rule: after 3 same-class wins, force win to the other
+
+---
+
+🎰 **5. Jackpot System**
+
+**Jackpot Types:**
+
+Mini Jackpot: 5× base reward
+
+Minor Jackpot: 15× base reward
+
+Major Jackpot: 50× base reward
+
+Grand Jackpot: 100× base reward 
+
+**Funding Logic:**
+
+* Manual seed from owner wallet
+* Must repay founder seed +10% before jackpots grow
+* Post-repayment: fees grow jackpot pools
+* Deterministic RNG (block hash + nonce) triggers win
+* Full GUI + mobile notification system
+
+---
+
+🖥️ **6. Wallet & Mining Design**
+
+**Desktop GUI:**
+
+* 1-click: Create Wallet
+* 1-click: Create Mining Wallet
+* Device type detection (CPU vs ASIC)
+* Live mining panel (block, status, hash rate)
+* Jackpot popup animations
+* Desktop icon auto-created on install
+
+**Mobile App (Phase 2):**
+
+* Real-time miner stats
+* Jackpot win push notifications
+* Subscription-based model
+* Only official app can link to mining wallet
+
+---
+
+🚫 **7. Anti-Cheat Enforcement**
+
+**Phase 1: Soft Flag**
+
+* Trigger: device class change
+* Action: disables special rewards
+* Cold wallet access blocked
+* GUI flag logged for admin
+
+**Phase 2: Hard Ban**
+
+* Persistent evasion → Permanent ban
+* Jackpot eligibility revoked
+* Wallet frozen, funds recycled
+* No appeal
+
+**Admin GUI:**
+
+* `flagged_wallets.log` integration
+* Admin controls: Ban / Unban / View Logs
+* Alerts for new violations
+
+---
+
+💎 **8. Scarcity Strategy**
+
+* \~42% mined in first 2 years
+* 8-min blocks reduce chain bloat
+* Halving → scarcity → longevity
+* Jackpot odds slowly tighten
+* Hobbyist-friendly again by Year 8+
+
+---
+
+📣 **9. Virality & Narrative**
+
+**Core Tagline:** “Hope, Fun, and Instant Dopamine”
+
+* Gamified mining → dopamine hits
+* Jackpot win = social moment
+* Dead-simple UX → mass adoption
+* Appeals to whales via masses
+* Meme-ready: *"Powerball of Crypto"*
+
+---
+
+🚧 **10. Development Task Status**
+
+✅ Blockchain functional and builds
+✅ Tokenomics + halving schedule locked
+🔨 In Progress: `GetBlockSubsidy()` + jackpot logic
+🔨 In Progress: Jackpot reward triggers in `miner.cpp`
+🎨 Next: GUI animations + admin panel
+📦 Next: Cross-platform installers
+📱 Next: Mobile companion app planning
+
+---
+
+🔐 **11. Secure Vault Recovery (No Seed Phrases)**
+
+**2-of-3 Recovery Shares:**
+
+* **A.** Biometric-bound (TPM / Secure Enclave)
+* **B.** 2FA (Google Auth / Authy)
+* **C.** Optional passphrase vault backup
+
+**Recovery Flow:**
+
+* Provide wallet ID
+* Enter 2FA (decrypt Share B)
+* Biometric check (regenerate Share A)
+* (Optional) Decrypt Share C
+* Recover main key from 2 of 3
+
+**Libraries:**
+
+* `slip39`, `sss`, or MPC crypto
+* Encrypted Share B can be stored on-chain or IPFS
+
+**UX Must-Haves:**
+
+* Confetti on success
+* Backup card print
+* “Test Recovery” mode
+* Clear safety warnings
+* On-device vault health check tool
+
+**Security Guarantees:**
+
+* 100% self-custody
+* No cloud storage
+* Nothing can be brute-forced
+* HRB Studios can’t recover — only you can
+
+---
+
+If you'd like, I can now generate:
+
+* Updated whitepaper formatting
+* A roadmap chart
+* Or help you lock in installer UX flow.
+
+🧱 CORE BLOCKCHAIN
+
+✅ Blockchain compiles and syncs
+✅ Genesis block configured with 0 premine
+✅ Block reward halving + block time schedule implemented
+✅ Golden Block (2×) logic added
+✅ Diamond Block (5×) logic added
+🔧 GetBlockSubsidy() finalization (ensure clean structure)
+🔧 Static jackpot tier reward multipliers (Mini/Minor/Major/Grand) working
+🔧 Jackpot win odds properly encoded (height-based RNG)
+🔧 Jackpot fee accumulation in ConnectBlock() confirmed
+🔧 Jackpot payout from CreateNewBlock() coinbase working correctly
+🔧 Founder reimbursement logic working (pays 10% premium before jackpots grow)
+
+💸 TOKENOMICS
+
+✅ Total supply: 25,000,000 HRB
+✅ No premine
+✅ Halving every 210,000 blocks
+✅ Block time doubles every 210,000 blocks
+✅ All jackpot reward tiers locked in
+✅ Jackpot pool fees correctly deducted (0.25% of tx value)
+🔧 Founder wallet + jackpot wallets hardcoded in consensus params
+🔧 Jackpot odds scaling down after Year 8 not yet enforced
+
+🎰 JACKPOT SYSTEM
+
+✅ Jackpot fee split into Mini, Minor, Major, Grand accumulators
+✅ 50/50 CPU vs ASIC win enforcement planned
+🔧 RNG trigger based on block hash + nonce fully implemented
+🔧 Jackpot wins reset pool to seed
+🔧 Fees routed to seed wallet until +10% reimbursement
+🟥 No fee redirection to jackpot growth after seed repaid yet
+🟥 No enforcement yet for “force win to other miner type after 3 same-class wins”
+
+🖥️ WALLET UX
+
+✅ Qt GUI launches and syncs
+✅ One-click “Create Wallet”
+✅ One-click “Create Mining Wallet”
+✅ Auto-detect device type (CPU vs ASIC/GPU)
+✅ Live block/mine status panel
+🔧 Add jackpot popup animation (GUI trigger)
+🔧 Admin wallet flagging UI (freeze/ban)
+🟥 Jackpot panel to show current pool sizes
+🟥 Desktop installer with shortcut/icon creation
+
+🛡️ ANTI-CHEAT SYSTEM
+
+✅ Wallet flagging logic added
+✅ Phase 1: flag → disable jackpot + cold wallet
+🔧 Phase 2: hard ban → permanent disable + fund recycle
+🔧 flagged_wallets.log auto-import to admin GUI
+🔧 GUI admin actions: Ban / Unban / View Logs
+🟥 Device change detection hash (CPU → ASIC detection code not finished)
+
+📱 MOBILE APP (PHASE 2)
+
+🟥 App not started
+🟥 Real-time miner stats
+🟥 Jackpot win alerts
+🟥 Tied to wallet ID (not general purpose)
+🟥 Subscription toggle logic (optional)
+
+🔐 SECURE RECOVERY SYSTEM
+
+✅ 2-of-3 key share recovery design
+✅ Biometric share via TPM/Secure Enclave
+✅ 2FA encrypted share (Google Auth / Authy)
+✅ Optional passphrase share (backup QR/export)
+✅ Libraries selected (slip39, sss, thresholdcrypto)
+🟥 GUI not yet implemented
+🟥 On-chain/IPFS storage of encrypted Share B
+🟥 Recovery assistant module (test mode, health check)
+
+📣 VIRAL & LAUNCH STRATEGY
+
+✅ Powerball-of-Crypto branding
+✅ Meme-ready jackpot structure
+✅ Founder-held wallets for social win triggers
+🟥 Jackpot win animation not built
+🟥 Share button for wins (TikTok, X, IG, etc.)
+🟥 Website with wallet download + guide (hrbstudios.com placeholder only)
+
+🚧 CURRENT DEV BLOCKERS
+
+🔧 validation.cpp jackpot fee accumulation working, but reward distribution in miner.cpp needs polish
+🔧 arith_uint256 modulus logic fixed, but RNG output needs final testing
+🟥 Some jackpot reward cases cause build error or crash
+🟥 Finalize GetBlockSubsidy() structure to clean up remaining edge logic
+
+

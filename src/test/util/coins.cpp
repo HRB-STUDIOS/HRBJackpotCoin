@@ -1,0 +1,28 @@
+// Copyright (c) 2025 HRB Studios
+// HRB Jackpot Coin™ is a trademark of HRB Studios. All rights reserved.
+// Distributed under the MIT software license, see the accompanying LICENSE file or visit https://opensource.org/licenses/MIT
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include <test/util/coins.h>
+
+#include <coins.h>
+#include <primitives/transaction.h>
+#include <script/script.h>
+#include <test/util/random.h>
+#include <uint256.h>
+
+#include <stdint.h>
+#include <utility>
+
+COutPoint AddTestCoin(CCoinsViewCache& coins_view)
+{
+    Coin new_coin;
+    const uint256 txid{InsecureRand256()};
+    COutPoint outpoint{txid, /*nIn=*/0};
+    new_coin.nHeight = 1;
+    new_coin.out.nValue = InsecureRandMoneyAmount();
+    new_coin.out.scriptPubKey.assign(uint32_t{56}, 1);
+    coins_view.AddCoin(outpoint, std::move(new_coin), /*possible_overwrite=*/false);
+
+    return outpoint;
+};
