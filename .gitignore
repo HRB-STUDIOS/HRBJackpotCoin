@@ -150,3 +150,93 @@ dist/
 /guix-build-*
 
 /ci/scratch/
+
+# Build artifacts
+*.o
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Debug/profile
+*.ilk
+*.pdb
+*.dwo
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Qt build
+*.moc
+*.qrc.depends
+*.qrc.cpp
+*.ui.cpp
+*.rcc
+
+# Autotools/CMake
+/CMakeFiles/
+/CMakeCache.txt
+/config.log
+/config.status
+/configure
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache/
+/build-aux/
+/libtool
+/stamp-h1
+*.m4
+*.in
+
+# Project build folders
+/build/
+/src/qt/.uic/
+/src/qt/.moc/
+/src/qt/.rcc/
+
+# IDE/editor
+*.swp
+*~
+*.bak
+*.tmp
+*.user
+*.suo
+*.vcproj
+*.vcxproj
+*.vscode/
+*.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Wallet/runtime (don’t commit user data)
+*.wallet.*
+*.pid
+*.log
+hrbjackpotcoin.conf
+peers.dat
+mempool.dat
+banlist.dat
+fee_estimates.dat
+debug.log
+db.log
+blocks/
+chainstate/
+indexes/
+testnet3/
+regtest/
+hrbjackpotcoin.log
+
+# Hidden backup
+*.orig
+*.rej
