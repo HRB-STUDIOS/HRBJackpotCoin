@@ -1,4 +1,4 @@
-name: HRB Jackpot Coin — Build & Artifacts (Linux + Windows)
+name: HRB Jackpot Coin — Build & Artifacts (Linux + Windows-native)
 
 on:
   push:
@@ -9,6 +9,9 @@ permissions:
   contents: write
 
 jobs:
+  # =========================
+  # Linux native (Qt optional)
+  # =========================
   build-linux:
     name: Build (Linux)
     runs-on: ubuntu-latest
@@ -64,9 +67,12 @@ jobs:
           path: hrbjackpotcoin-linux.tar.gz
           if-no-files-found: error
 
-  build-windows:
-    name: Build (Windows, cross-compile on Ubuntu)
-    runs-on: ubuntu-latest
+  # =========================
+  # Windows native (VS 2022)
+  # =========================
+  build-windows-msvc:
+    name: Build (Windows native, VS 2022)
+    runs-on: windows-2022
     steps:
       - name: Checkout (full repo with submodules & tags)
         uses: actions/checkout@v4
@@ -77,48 +83,52 @@ jobs:
           lfs: false
 
       - name: Ensure git metadata visible
+        shell: bash
         run: |
           git config --global --add safe.directory "$(pwd)"
           git fetch --tags --force || true
+          git submodule sync --recursive
+          git submodule update --init --recursive
 
-      - name: Install cross toolchain
+      # MSBuild is on the windows-2022 image, but ensure PATH
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      # Use vcpkg in manifest mode (expects a vcpkg.json in your MSVC/solution dir)
+      # Bitcoin Core uses build_msvc with vcpkg manifest. Adjust the directory if yours differs.
+      - name: Setup vcpkg (manifest)
+        uses: microsoft/setup-vcpkg@v1
+        with:
+          vcpkgJsonDir: build_msvc   # <-- change if your vcpkg.json lives elsewhere
+          # triplet can be overridden inside the manifest; otherwise:
+          triplet: x64-windows-static-md
+          cleanAfterBuild: true
+
+      # Build your MSVC solution
+      # If your solution/target names differ from upstream, change them here.
+      - name: Build Solution (Release x64)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl git \
-            g++-mingw-w64-x86-64 mingw-w64 mingw-w64-tools cmake zip
+          msbuild build_msvc\\hrbjackpotcoin.sln /m /p:Configuration=Release /p:Platform=x64 /p:UseMultiToolTask=true /verbosity:minimal
 
-      - name: Prepare depends
-        run: mkdir -p depends/sources depends/work
-
-      - name: Build depends (Windows)
-        run: make -C depends HOST=x86_64-w64-mingw32 -j"$(nproc)"
-        timeout-minutes: 60
-
-      - name: Autotools bootstrap
-        run: |
-          chmod +x autogen.sh || true
-          ./autogen.sh || true
-
-      - name: Configure (Windows, headless)
-        run: |
-          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site \
-          ./configure --host=x86_64-w64-mingw32 --prefix=/ --without-gui || (test -f config.log && tail -n +1 config.log; false)
-
-      - name: Build (Windows, verbose)
-        run: make -j"$(nproc)" V=1
-
-      - name: Package Windows
+      # Package whatever exes were produced (adjust globs to your actual output paths)
+      - name: Collect & Package Windows binaries
+        shell: bash
         run: |
           mkdir -p dist/windows
-          [ -f src/hrbjackpotcoind.exe ] && cp src/hrbjackpotcoind.exe dist/windows/ || true
-          [ -f src/hrb-cli.exe ] && cp src/hrb-cli.exe dist/windows/ || true
-          [ -f src/hrb-tx.exe ] && cp src/hrb-tx.exe dist/windows/ || true
-          (cd dist && zip -r ../hrbjackpotcoin-windows.zip windows)
+          # Common MSVC output locations; adjust if your solution outputs elsewhere:
+          shopt -s nullglob
+          for d in "build_msvc/x64/Release" "build_msvc/Release" "build_msvc/bin/Release"; do
+            [ -d "$d" ] && cp -n "$d"/*.exe dist/windows/ || true
+          done
+          # Fallback: search entire tree for our exes (adjust names as needed)
+          if [ -z "$(ls -A dist/windows 2>/dev/null)" ]; then
+            find . -iname "hrbjackpotcoind*.exe" -o -iname "hrb-cli*.exe" -o -iname "hrb-tx*.exe" -o -iname "hrbjackpotcoin-qt*.exe" -exec cp -n {} dist/windows/ \; || true
+          fi
+          7z a hrbjackpotcoin-windows-msvc.zip ./dist/windows/*
 
-      - name: Upload Windows artifact
+      - name: Upload Windows (MSVC) artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hrbjackpotcoin-windows
-          path: hrbjackpotcoin-windows.zip
+          name: hrbjackpotcoin-windows-msvc
+          path: hrbjackpotcoin-windows-msvc.zip
           if-no-files-found: error
