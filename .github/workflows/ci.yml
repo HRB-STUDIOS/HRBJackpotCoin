@@ -13,15 +13,18 @@ jobs:
     name: Build (Linux)
     runs-on: ubuntu-latest
     steps:
-      # --- Checkout + submodules (needed for secp256k1, leveldb, etc.)
-      - name: Checkout
+      - name: Checkout (full repo with submodules & tags)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
           submodules: recursive
-          lfs: "false"
-      - name: Mark repo safe
-        run: git config --global --add safe.directory '*'
+          lfs: false
+
+      - name: Ensure git metadata visible
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+          git fetch --tags --force || true
 
       - name: Install build deps
         run: |
@@ -65,14 +68,18 @@ jobs:
     name: Build (Windows, cross-compile on Ubuntu)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (full repo with submodules & tags)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
           submodules: recursive
-          lfs: "false"
-      - name: Mark repo safe
-        run: git config --global --add safe.directory '*'
+          lfs: false
+
+      - name: Ensure git metadata visible
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+          git fetch --tags --force || true
 
       - name: Install cross toolchain
         run: |
@@ -82,12 +89,10 @@ jobs:
             g++-mingw-w64-x86-64 mingw-w64 mingw-w64-tools cmake zip
 
       - name: Prepare depends
-        run: |
-          mkdir -p depends/sources depends/work
+        run: mkdir -p depends/sources depends/work
 
       - name: Build depends (Windows)
-        run: |
-          make -C depends HOST=x86_64-w64-mingw32 -j"$(nproc)"
+        run: make -C depends HOST=x86_64-w64-mingw32 -j"$(nproc)"
         timeout-minutes: 60
 
       - name: Autotools bootstrap
