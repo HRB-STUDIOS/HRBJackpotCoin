@@ -13,11 +13,12 @@ jobs:
     name: Build (Linux)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full history)
+      # --- Checkout + submodules (needed for secp256k1, leveldb, etc.)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "false"
+          submodules: recursive
           lfs: "false"
       - name: Mark repo safe
         run: git config --global --add safe.directory '*'
@@ -39,10 +40,10 @@ jobs:
 
       - name: Configure (try GUI, fallback headless)
         run: |
-          ./configure --with-gui=qt || ./configure --without-gui
+          ./configure --with-gui=qt || ./configure --without-gui || (test -f config.log && tail -n +1 config.log; false)
 
-      - name: Build
-        run: make -j"$(nproc)"
+      - name: Build (verbose)
+        run: make -j"$(nproc)" V=1
 
       - name: Package Linux
         run: |
@@ -64,11 +65,11 @@ jobs:
     name: Build (Windows, cross-compile on Ubuntu)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full history)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "false"
+          submodules: recursive
           lfs: "false"
       - name: Mark repo safe
         run: git config --global --add safe.directory '*'
@@ -79,6 +80,10 @@ jobs:
           sudo apt-get install -y \
             build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl git \
             g++-mingw-w64-x86-64 mingw-w64 mingw-w64-tools cmake zip
+
+      - name: Prepare depends
+        run: |
+          mkdir -p depends/sources depends/work
 
       - name: Build depends (Windows)
         run: |
@@ -93,10 +98,10 @@ jobs:
       - name: Configure (Windows, headless)
         run: |
           CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site \
-          ./configure --host=x86_64-w64-mingw32 --prefix=/ --without-gui
+          ./configure --host=x86_64-w64-mingw32 --prefix=/ --without-gui || (test -f config.log && tail -n +1 config.log; false)
 
-      - name: Build (Windows)
-        run: make -j"$(nproc)"
+      - name: Build (Windows, verbose)
+        run: make -j"$(nproc)" V=1
 
       - name: Package Windows
         run: |
